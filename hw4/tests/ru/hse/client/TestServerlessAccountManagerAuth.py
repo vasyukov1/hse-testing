@@ -18,12 +18,11 @@ class TestServerlessAccountManagerAuth:
         #arrange
         correct_login = "user"
         correct_password = "somePassword"
-        encoded_password = AccountManager.get_encoded_password(
-            correct_password)  # Предположим, что метод существует в классе или импортирован
+        encoded_password = AccountManager.get_encoded_password(correct_password)
         correct_session = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -39,12 +38,12 @@ class TestServerlessAccountManagerAuth:
     def test_call_login_invalid_credentials(self):
         #arrange
         correct_login = "user"
-        incorrect_password = "wrongPassword"  # Исправлено: должно отличаться от корректного пароля в коде Java (в оригинале оба были somePassword)
+        incorrect_password = "wrongPassword"
         encodedIncorrect = AccountManager.get_encoded_password(incorrect_password) if hasattr(AccountManager,
                                                                                               'get_encoded_password') else ""
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.NO_USER_INCORRECT_PASSWORD, None)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -77,7 +76,7 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.ALREADY_LOGGED, correct_session)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -102,7 +101,7 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -111,14 +110,12 @@ class TestServerlessAccountManagerAuth:
         #act
         account = account_manager.login(correct_login, incorrect_password)
         exceptions = account_manager.get_exceptions()
-        exc = exceptions[-1] if exceptions else None  # Последний exception после повторного вызова login
+        exc = exceptions[-1] if exceptions else None
 
         # Asserts аналогичны предыдущему тесту с поправкой на локальный кеш:
         assert account is None, "Account is not null after already logged state from local cache for login"
-        assert len(
-            exceptions) == 1, "AccountManager contains 0 or >1 errors after already logged state from local cache for login"
-        assert isinstance(exc,
-                          OperationException), "Response is null after already logged state from local cache for login"
+        assert len(exceptions) == 1, "AccountManager contains 0 or >1 errors after already logged state from local cache for login"
+        assert isinstance(exc, OperationException), "Response is null after already logged state from local cache for login"
         assert exc.response.body == correct_session, "Response body is equal to already logged session after already logged state from local cache for login"
         assert exc.response.code == OperationResponse.ALREADY_LOGGED, "Response code is not ALREADY LOGGED after already logged state from local cache for login"
 
@@ -132,7 +129,8 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -143,9 +141,7 @@ class TestServerlessAccountManagerAuth:
 
         # assert
         assert logout_result is True, "False returned after succeed call of logout on correct state and credentials"
-        assert len(
-            account_manager.get_exceptions()) == 0, "Exceptions happens during succeed call of logout on correct state and credentials"
-
+        assert len(account_manager.get_exceptions()) == 0, "Exceptions happens during succeed call of logout on correct state and credentials"
 
     def test_logout_not_logged_remote(self):
         # arrange
@@ -155,7 +151,8 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.NOT_LOGGED)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -167,8 +164,7 @@ class TestServerlessAccountManagerAuth:
 
         # assert
         assert logout_result is False, "Logout result is true for not_logged code from remote server during logout"
-        assert len(
-            account_manager.get_exceptions()) == 1, "There are 0 or >1 exceptions for not_logged code from remote server during logout"
+        assert len(account_manager.get_exceptions()) == 1, "There are 0 or >1 exceptions for not_logged code from remote server during logout"
         assert exc.response is not None, "Response is null for not_logged code from remote server during logout"
         assert exc.response.body is None, "Response body is null for NOT LOGGED not_logged code from remote server during logout"
         assert exc.response.code == OperationResponse.NOT_LOGGED, "Response code is not NOT LOGGED not_logged code from remote server during logout"
@@ -182,7 +178,8 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -195,8 +192,7 @@ class TestServerlessAccountManagerAuth:
 
         # assert
         assert logout_result is False, "Logout result is true for logout call with no account in cache"
-        assert len(
-            account_manager.get_exceptions()) == 1, "There are 0 or >1 exceptions for logout call with no account in cache"
+        assert len(account_manager.get_exceptions()) == 1, "There are 0 or >1 exceptions for logout call with no account in cache"
         assert exc.response is not None, "Response is null for logout call with no account in cache"
         assert exc.response.body is None, "Response body is not null for logout call with no account in cache"
         assert exc.response.code == OperationResponse.NOT_LOGGED, "Response code is not NOT LOGGED for logout call with no account in cache"
@@ -257,15 +253,13 @@ class TestServerlessAccountManagerAuth:
 
         # act
         account = account_manager.login(None, "password")
-        exceptions = account_manager.get_exceptions()  # Предполагаем метод get_exceptions() вместо Java-коллекции
+        exceptions = account_manager.get_exceptions()
         exc = exceptions[0] if exceptions else None
 
-        # Assert
+        # assert
         assert account is None, "Account is not null after login call with first null argument"
-        assert len(exceptions) == 1, \
-            "There are 0 or >1 exceptions after login call with first null argument"
-        assert exc.response is not None, \
-            "Exception response is null after login call with first null argument"
+        assert len(exceptions) == 1, "There are 0 or >1 exceptions after login call with first null argument"
+        assert exc.response is not None, "Exception response is null after login call with first null argument"
         assert exc.response.code == OperationResponse.NULL_ARGUMENT, \
             "Exception response code is not NULL ARGUMENT after login call with first null argument"
         assert exc.response.body is None, \
@@ -316,7 +310,8 @@ class TestServerlessAccountManagerAuth:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.INCORRECT_SESSION)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)

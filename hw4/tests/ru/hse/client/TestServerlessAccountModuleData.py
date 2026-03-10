@@ -35,11 +35,11 @@ class TestServerlessAccountModuleData:
         delta_correct = 100.0
 
         #record
-        ...
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_correct)
 
         #arrange_2
         account = Account(correct_login)
-        account.init_data_storage(self.data_source)  # Метод инициализации dataSource, возможно другой название
+        account.init_data_storage(self.data_source)
         account.active_session = correct_session
 
         #act
@@ -66,7 +66,7 @@ class TestServerlessAccountModuleData:
         delta_correct = 100.0
 
         #record
-        ...
+        self.data_source.deposit.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         account = Account(correct_login)
@@ -88,7 +88,7 @@ class TestServerlessAccountModuleData:
         correct_session = 1
         delta_withdraw = 100.0
         account = Account(correct_login)
-        account.active_session = correct_session  # Здесь может быть ошибка, если session не инициализирована корректно
+        account.active_session = correct_session
 
         #act
         response = account.withdraw(delta_withdraw)
@@ -106,7 +106,7 @@ class TestServerlessAccountModuleData:
         delta_too_much_withdraw = 100.0
 
         #record
-        ...
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NO_MONEY, init_balance)
 
         #arrange_2
         account = Account(correct_login)
@@ -131,7 +131,10 @@ class TestServerlessAccountModuleData:
         delta_correct_withdraw = 100.0
 
         #record
-        ...
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_correct_deposit)
+        self.data_source.withdraw.return_value = OperationResponse(
+            OperationResponse.SUCCEED, delta_correct_deposit - delta_correct_withdraw
+        )
 
         #arrange_2
         account = Account(correct_login)
@@ -163,7 +166,7 @@ class TestServerlessAccountModuleData:
         delta_correct_withdraw = 100.0
 
         #record
-        ...
+        self.data_source.withdraw.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         account = Account(correct_login)
@@ -195,15 +198,9 @@ class TestServerlessAccountModuleData:
         response = account.get_balance()
 
         #assert
-        assert response is not None, (
-            "Response is null for getBalance on not connected account"
-        )
-        assert response.code == OperationResponse.CONNECTION_ERROR, (
-            f"Expected CONNECTION_ERROR but got Connection error in getBalance test"
-        )
-        assert response.body is None, (
-            "Response data body should be None when no dataSource initialized"
-        )
+        assert response is not None, "Response is null for getBalance on not connected account"
+        assert response.code == OperationResponse.CONNECTION_ERROR, "Expected CONNECTION_ERROR but got Connection error in getBalance test"
+        assert response.body is None, "Response data body should be None when no dataSource initialized"
 
     def test_get_balance_success(self):
         #arrange
@@ -212,7 +209,7 @@ class TestServerlessAccountModuleData:
         init_balance = 50.0
 
         #record
-        ...
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, init_balance)
 
         #arrange_2
         account = Account(correct_login)
@@ -242,7 +239,7 @@ class TestServerlessAccountModuleData:
         init_balance = 50.0
 
         #record
-        ...
+        self.data_source.get_balance.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         account = Account(correct_login)

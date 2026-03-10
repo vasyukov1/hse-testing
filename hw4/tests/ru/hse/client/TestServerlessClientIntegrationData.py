@@ -1,4 +1,3 @@
-
 import pytest
 from unittest import mock
 
@@ -23,17 +22,18 @@ class TestServerlessClientIntegrationData:
         session_id = 1
         start_balance = 0.0
 
-        #record (имитируем поведение)
-        ...
+        #record
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
         a = client.login(correct_login, correct_password)
 
         #act
-        ret_balance = Client.get_balance(a)  # сохраняем оригинальное имя метода getBalance в camelCase как есть
+        ret_balance = Client.get_balance(a)
 
-        #assert (сохраняем оригинальный текст)
+        #assert
         assert start_balance == ret_balance, "Start balance not equal to expected one"
 
     def test_client_get_balance_local_not_logged_exceptions(self):
@@ -45,21 +45,23 @@ class TestServerlessClientIntegrationData:
         start_balance = 0.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
         a = client.login(correct_login, correct_password)
         client.logout(a)
 
-        #act & assert (сохраняем оригинальный текст с Java-шаблонами)
+        #act & assert
         with pytest.raises(OperationException) as excinfo:
             Client.get_balance(
                 a), "Exception not thrown for getBalance after some server code(" + OperationResponse.code_to_error_message(
                 OperationResponse.NOT_LOGGED) + ")"
         exc = excinfo.value
 
-        #assert (сохраняем оригинальный текст)
+        #assert
         assert exc.response is not None, "Exception responce is null during incorrect getBalance"
         assert exc.response.code == OperationResponse.NOT_LOGGED, "Exception code is not relevant to server answer during incorrect getBalance"
 
@@ -77,22 +79,22 @@ class TestServerlessClientIntegrationData:
         start_balance = 0.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.get_balance.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
         a = client.login(correct_login, correct_password)
 
-        #act & assert (сохраняем оригинальный текст с Java-шаблонами и параметризацию)
+        #act & assert
         with pytest.raises(OperationException) as excinfo:
             Client.get_balance(
                 a), "Exception not thrown for getBalance after some server code(" + OperationResponse.code_to_error_message(
                 exception_code) + ")"
         exc = excinfo.value
 
-        #assert (сохраняем оригинальный текст)
-        error_message = OperationResponse.code_to_error_message(
-            exception_code)  # сохраняем оригинальное имя метода codeToErrorMessage как есть
+        #assert
+        error_message = OperationResponse.code_to_error_message(exception_code)
         assert exc.response is not None, f"Exception responce is null during exceptio({error_message}) on getBalance"
         assert exc.response.code == exception_code, f"Exception code is not relevant to server answer during exceptio({error_message}) on getBalance"
 
@@ -105,7 +107,8 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_correct_deposit)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -151,7 +154,9 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -180,7 +185,10 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -214,7 +222,8 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(exception_code, None)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -244,7 +253,10 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
+        self.data_source.deposit.return_value = OperationResponse(exception_code, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -271,8 +283,8 @@ class TestServerlessClientIntegrationData:
         initial_balance = 50.0
 
         # record
-        ...
-
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NO_MONEY, initial_balance)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -297,7 +309,11 @@ class TestServerlessClientIntegrationData:
         withdraw_amount = 200.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, deposit_amount)
+        self.data_source.withdraw.return_value = OperationResponse(
+            OperationResponse.SUCCEED, deposit_amount - withdraw_amount
+        )
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -314,15 +330,21 @@ class TestServerlessClientIntegrationData:
         #arrange
         correct_login = "someLogin"
         correct_password = "somePassword"
-        encoded_password = AccountManager.get_encoded_password(
-            correct_password)  # Замените на актуальную реализацию получения хеша пароля
+        encoded_password = AccountManager.get_encoded_password(correct_password)
         session_id = 1
         start_balance = 0.0
         delta_withdraw = 100.0
         delta_deposit = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_deposit)
+        self.data_source.withdraw.return_value = OperationResponse(
+            OperationResponse.SUCCEED, delta_deposit - delta_withdraw
+        )
+        self.data_source.get_balance.return_value = OperationResponse(
+            OperationResponse.SUCCEED, delta_deposit - delta_withdraw
+        )
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -333,9 +355,8 @@ class TestServerlessClientIntegrationData:
         #act
         ret_balance = Client.get_balance(account)
 
-        #assert (сохранён оригинальный assert-текст)
-        assert ret_balance == (
-                    delta_deposit - delta_withdraw), "getBalance after correct withdraw not equal to expected one"
+        #assert
+        assert ret_balance == (delta_deposit - delta_withdraw), "getBalance after correct withdraw not equal to expected one"
 
     def test_withdraw_not_logged_exception(self):
         #arrange
@@ -346,7 +367,9 @@ class TestServerlessClientIntegrationData:
         delta_withdraw = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -374,7 +397,10 @@ class TestServerlessClientIntegrationData:
         delta_withdraw = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -407,7 +433,8 @@ class TestServerlessClientIntegrationData:
         delta_correct_withdraw = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.withdraw.return_value = OperationResponse(exception_code, None)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -440,7 +467,10 @@ class TestServerlessClientIntegrationData:
         delta_correct_withdraw = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
+        self.data_source.withdraw.return_value = OperationResponse(exception_code, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         # Arrange_2
         client = Client(self.auth_source, self.data_source)

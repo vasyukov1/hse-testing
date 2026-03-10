@@ -1,4 +1,3 @@
-
 import pytest
 from unittest import mock
 
@@ -24,7 +23,7 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -49,14 +48,15 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        body = session_id if exception_code == OperationResponse.ALREADY_LOGGED else None
+        self.auth_source.login.return_value = OperationResponse(exception_code, body)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
 
         #act
         with pytest.raises(OperationException) as excinfo:
-            client.login(correct_login, correct_password)#, f"Exception not thrown after some server code({OperationResponse.code_to_error_message(exception_code)})"
+            client.login(correct_login, correct_password)
 
         #assert
         assert excinfo.value.response.code == exception_code, "Exception code is not relevant to server answer"
@@ -69,8 +69,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
-
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -91,7 +91,7 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -114,7 +114,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.NOT_LOGGED)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -160,7 +161,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -184,7 +186,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(exception_code)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -203,11 +206,12 @@ class TestServerlessClientIntegrationAuth:
         #arrange
         correct_login = "someLogin"
         correct_password = "somePassword"
-        encoded_password = AccountManager.get_encoded_password(correct_password)  # Предположим, что метод get_encoded_password имитирован или существует в классе (используется как есть)
+        encoded_password = AccountManager.get_encoded_password(correct_password)
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)

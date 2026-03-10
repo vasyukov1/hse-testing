@@ -97,7 +97,7 @@ class AccountManager:
     def call_register(self, login: str, password: str) -> OperationResponse:
         response = self.server_auth_data.register(login, password)
         if response.code == OperationResponse.SUCCEED:
-            answer = response.body
+            answer = int(response.body)
             if answer and isinstance(answer, int):  # Assuming int instead of Long
                 account = Account(login)
                 account.active_session = answer
@@ -116,7 +116,7 @@ class AccountManager:
     def call_login(self, login: str, password: str) -> OperationResponse:
         response = self.server_auth_data.login(login, password)
         if response.code == OperationResponse.SUCCEED:
-            answer = response.body
+            answer = int(response.body)
             if isinstance(answer, int):
                 account = Account(login)
                 account.active_session = answer
