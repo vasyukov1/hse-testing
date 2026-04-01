@@ -15,7 +15,9 @@ public class ServerLogicProxy implements IAccountDataSource {
         OperationResponse balanceResponse = dataSource.getBalance(login, session);
         if (balanceResponse.code == OperationResponse.SUCCEED) {
             Double amount = (Double) balanceResponse.body;
-            if (delta > amount) return new OperationResponse(OperationResponse.NO_MONEY, amount);
+            if (delta > amount) {
+                return new OperationResponse(OperationResponse.NO_MONEY, amount);
+            }
             return dataSource.withdraw(login, session, delta);
         }
         return balanceResponse;

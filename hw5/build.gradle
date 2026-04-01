@@ -1,6 +1,9 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.spotbugs' version '6.0.18'
+    id 'pmd'
+    id 'checkstyle'
 }
 
 repositories {
@@ -31,11 +34,115 @@ java {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
+
+// ──────────────── SpotBugs ────────────────
+spotbugs {
+    toolVersion = '4.8.6'
+    ignoreFailures = true
+    effort = 'max'
+    reportLevel = 'low'
+    excludeFilter = file('config/spotbugs/exclude.xml')
+}
+
+spotbugsMain {
+    reports {
+        html {
+            required = true
+            outputLocation = file("${buildDir}/reports/spotbugs/main.html")
+            stylesheet = 'fancy-hist.xsl'
+        }
+        xml { required = false }
+    }
+}
+
+// ──────────────── PMD ────────────────
+pmd {
+    toolVersion = '7.0.0'
+    ignoreFailures = true
+    ruleSets = []
+    ruleSetFiles = files('config/pmd/ruleset.xml')
+    consoleOutput = false
+}
+
+pmdMain {
+    reports {
+        html { required = true }
+        xml  { required = false }
+    }
+}
+
+tasks.register('pmdCognitive', Pmd) {
+    group = 'verification'
+    description = 'Runs PMD with the Cognitive Complexity rule only'
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.compileClasspath
+    ruleSets = []
+    ruleSetFiles = files('config/pmd/cognitive-ruleset.xml')
+    ignoreFailures = true
+    reports {
+        html {
+            required = true
+            outputLocation = file("${buildDir}/reports/pmd/cognitive.html")
+        }
+        xml { required = false }
+    }
+}
+
+// ──────────────── Checkstyle (Google Style) ────────────────
+checkstyle {
+    toolVersion = '10.17.0'
+    configFile = file('config/checkstyle/google_checks.xml')
+    ignoreFailures = true
+    showViolations = false
+    maxWarnings = Integer.MAX_VALUE
+}
+
+checkstyleMain {
+    reports {
+        html { required = true }
+        xml  { required = false }
+    }
+}
+
+// ──────────────── Run tasks ────────────────
 tasks.register('runClient', JavaExec) {
     dependsOn 'classes'
     mainClass = 'ru.hse.client.Client'
     classpath = sourceSets.main.runtimeClasspath
 }
+
+tasks.register('runLoadTest', JavaExec) {
+    dependsOn 'classes'
+    mainClass = 'ru.hse.test.LoadScenario'
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = ['-Xmx512m', '-Xms128m']
+    description = 'Run the profiling load-test scenario'
+}
+
+tasks.register('profileLoadTest', JavaExec) {
+    dependsOn 'classes'
+    mainClass = 'ru.hse.test.LoadScenario'
+    classpath = sourceSets.main.runtimeClasspath
+    jvmArgs = [
+            '-Xmx512m',
+            '-Xms128m',
+            '-XX:StartFlightRecording=filename=build/profiling/loadtest.jfr,dumponexit=true,settings=profile'
+    ]
+    description = 'Run the load-test scenario with Java Flight Recorder enabled'
+}
+
+tasks.register('collectBeforeReports', Copy) {
+    dependsOn 'pmdMain', 'spotbugsMain', 'checkstyleMain'
+    from layout.buildDirectory.dir('reports')
+    into layout.projectDirectory.dir('before_reports')
+}
+
+tasks.register('collectAfterReports', Copy) {
+    dependsOn 'pmdMain', 'spotbugsMain', 'checkstyleMain'
+    from layout.buildDirectory.dir('reports')
+    into layout.projectDirectory.dir('after_reports')
+}
+
 application {
     mainClass = 'ru.hse.server.Server'
 }

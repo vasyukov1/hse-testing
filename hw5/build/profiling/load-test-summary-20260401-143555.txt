@@ -1,0 +1,14 @@
+Load test summary
+=================
+Iterations: 10000
+Port: 7080
+Invalid login step: 250
+Database: /Users/alexvasyukov/Documents/GitHub/hse-testing/hw5/build/profiling/db-20260401-143555/accounts
+Duration: PT8.686765S
+Registered accounts: 10000
+Successful deposits: 10000
+Expected failed withdrawals: 10000
+Successful withdrawals: 10000
+Successful logouts: 10000
+Failed login attempts: 40
+Unexpected errors: 0

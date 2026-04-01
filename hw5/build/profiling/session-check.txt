@@ -1,0 +1,5 @@
+Session rows in persisted HSQL script:
+0
+
+Account rows in persisted HSQL script:
+10001

@@ -1,116 +1,123 @@
 package ru.hse.client;
 
-import ru.hse.*;
-import java.util.*;
+import java.util.Collection;
+
+import ru.hse.Account;
+import ru.hse.IAccountDataSource;
+import ru.hse.IAuthorizationSource;
+import ru.hse.OperationException;
+import ru.hse.OperationResponse;
 
 public class Client {
     private final AccountManager accountManager;
 
-    public Client(IAuthorizationSource authSource, IAccountDataSource dataSource)
-            throws OperationException {
+    public Client(IAuthorizationSource authSource, IAccountDataSource dataSource) {
         accountManager = new AccountManager(authSource, dataSource);
     }
 
-    public Client(String url) throws OperationException {
+    public Client(String url) {
         ApiClient baseApiClient = new ApiClient(url);
         accountManager = new AccountManager(baseApiClient, baseApiClient);
     }
 
-    // for tests only, do not use in production code
-    public final AccountManager getAccountManager() {
+    public AccountManager getAccountManager() {
         return accountManager;
     }
 
     public Account register(String login, String password) throws OperationException {
-        int size = accountManager.getExceptions().size();
-        Account a = accountManager.register(login, password);
-        if (a == null) {
-            OperationException[] exs = accountManager.getExceptions().toArray(new OperationException[0]);
-            for (int i = size; i < exs.length; i++) {
-                OperationException oe = exs[i];
-                switch (oe.response.code) {
-                    case OperationResponse.NULL_ARGUMENT:
-                    case OperationResponse.ALREADY_INITIATED:
-                    case OperationResponse.UNDEFINED_ERROR:
-                    case OperationResponse.CONNECTION_ERROR:
-                        throw oe;
-                    default:
-                        System.err.println(oe.toString());
-                }
-            }
+        int initialExceptionCount = accountManager.getExceptions().size();
+        Account account = accountManager.register(login, password);
+        if (account == null) {
+            rethrowNewExceptions(initialExceptionCount, true, true, true, false, false);
         }
-        return a;
+        return account;
     }
 
     public Account login(String login, String password) throws OperationException {
-        int size = accountManager.getExceptions().size();
-        Account a = accountManager.login(login, password);
-        if (a == null) {
-            OperationException[] exs = accountManager.getExceptions().toArray(new OperationException[0]);
-            for (int i = size; i < exs.length; i++) {
-                OperationException oe = exs[i];
-                switch (oe.response.code) {
-                    case OperationResponse.NULL_ARGUMENT:
-                    case OperationResponse.UNDEFINED_ERROR:
-                    case OperationResponse.CONNECTION_ERROR:
-                    case OperationResponse.ALREADY_LOGGED:
-                    case OperationResponse.NO_USER_INCORRECT_PASSWORD:
-                        throw oe;
-                    default:
-                        System.err.println(oe.toString());
-                }
-            }
+        int initialExceptionCount = accountManager.getExceptions().size();
+        Account account = accountManager.login(login, password);
+        if (account == null) {
+            rethrowNewExceptions(initialExceptionCount, true, true, false, true, true);
         }
-        return a;
+        return account;
     }
 
-    public boolean logout(Account a) throws OperationException {
-        int size = accountManager.getExceptions().size();
-        if (!accountManager.logout(a)) {
-            OperationException[] exs = accountManager.getExceptions().toArray(new OperationException[0]);
-            for (int i = size; i < exs.length; i++) {
-                OperationException oe = exs[i];
-                switch (oe.response.code) {
-                    case OperationResponse.UNDEFINED_ERROR:
-                    case OperationResponse.NULL_ARGUMENT:
-                    case OperationResponse.NOT_LOGGED:
-                    case OperationResponse.INCORRECT_SESSION:
-                    case OperationResponse.CONNECTION_ERROR:
-                        throw oe;
-                    default:
-                        System.err.println(oe.toString());
-                }
-            }
-
+    public boolean logout(Account account) throws OperationException {
+        int initialExceptionCount = accountManager.getExceptions().size();
+        if (!accountManager.logout(account)) {
+            rethrowNewExceptions(initialExceptionCount, false, true, true, true, false);
             return false;
         }
         return true;
     }
 
-    public static double getBalance(Account a) throws OperationException {
-        OperationResponse response = a.getBalance();
-        if (response.code == OperationResponse.SUCCEED) return (Double) response.body;
-        if (response.code == OperationResponse.INCORRECT_RESPONSE)
-            System.err.println(response.toString());
-        else throw new OperationException(response);
-        return Double.NaN;
+    public static double getBalance(Account account) throws OperationException {
+        return extractBalance(account.getBalance());
     }
 
-    public static double withdraw(Account a, double amound) throws OperationException {
-        OperationResponse response = a.withdraw(amound);
-        if (response.code == OperationResponse.SUCCEED) return (Double) response.body;
-        if (response.code == OperationResponse.INCORRECT_RESPONSE)
-            System.err.println(response.toString());
-        else throw new OperationException(response);
-        return Double.NaN;
+    public static double withdraw(Account account, double amount) throws OperationException {
+        return extractBalance(account.withdraw(amount));
     }
 
-    public static double deposit(Account a, double amound) throws OperationException {
-        OperationResponse response = a.deposit(amound);
-        if (response.code == OperationResponse.SUCCEED) return (Double) response.body;
-        if (response.code == OperationResponse.INCORRECT_RESPONSE)
-            System.err.println(response.toString());
-        else throw new OperationException(response);
-        return Double.NaN;
+    public static double deposit(Account account, double amount) throws OperationException {
+        return extractBalance(account.deposit(amount));
+    }
+
+    private void rethrowNewExceptions(
+            int initialExceptionCount,
+            boolean includeAlreadyInitiated,
+            boolean includeUndefined,
+            boolean includeNotLogged,
+            boolean includeIncorrectCredentials,
+            boolean includeAlreadyLogged)
+            throws OperationException {
+        int currentIndex = 0;
+        Collection<OperationException> exceptions = accountManager.getExceptions();
+        for (OperationException exception : exceptions) {
+            if (currentIndex < initialExceptionCount) {
+                currentIndex++;
+                continue;
+            }
+            currentIndex++;
+            if (shouldThrow(
+                    exception,
+                    includeAlreadyInitiated,
+                    includeUndefined,
+                    includeNotLogged,
+                    includeIncorrectCredentials,
+                    includeAlreadyLogged)) {
+                throw exception;
+            }
+            System.err.println(exception);
+        }
+    }
+
+    private boolean shouldThrow(
+            OperationException exception,
+            boolean includeAlreadyInitiated,
+            boolean includeUndefined,
+            boolean includeNotLogged,
+            boolean includeIncorrectCredentials,
+            boolean includeAlreadyLogged) {
+        return switch (exception.response.code) {
+            case OperationResponse.NULL_ARGUMENT, OperationResponse.CONNECTION_ERROR -> true;
+            case OperationResponse.ALREADY_INITIATED -> includeAlreadyInitiated;
+            case OperationResponse.UNDEFINED_ERROR -> includeUndefined;
+            case OperationResponse.NOT_LOGGED, OperationResponse.INCORRECT_SESSION -> includeNotLogged;
+            case OperationResponse.NO_USER_INCORRECT_PASSWORD -> includeIncorrectCredentials;
+            case OperationResponse.ALREADY_LOGGED -> includeAlreadyLogged;
+            default -> false;
+        };
+    }
+
+    private static double extractBalance(OperationResponse response) throws OperationException {
+        if (response.code == OperationResponse.SUCCEED && response.body instanceof Double balance) {
+            return balance;
+        }
+        if (response.code == OperationResponse.INCORRECT_RESPONSE) {
+            System.err.println(response);
+            return Double.NaN;
+        }
+        throw new OperationException(response);
     }
 }

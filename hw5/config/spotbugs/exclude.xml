@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SpotBugs exclusion filter.
+    Patterns here are ALREADY documented/suppressed at source level;
+    listing them here prevents double-reporting in the HTML output.
+-->
+<FindBugsFilter
+    xmlns="https://github.com/spotbugs/filter/3.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0
+                        https://raw.githubusercontent.com/spotbugs/spotbugs/master/spotbugs/etc/findbugsfilter.xsd">
+
+    <!--
+        SECOBDES: Java-deserialization in OperationResponse.responceFromString().
+        Already suppressed via @SuppressFBWarnings("SECOBDES") in source.
+    -->
+    <Match>
+        <Class name="ru.hse.OperationResponse"/>
+        <Method name="responceFromString"/>
+        <Bug pattern="SECOBDES"/>
+    </Match>
+
+</FindBugsFilter>

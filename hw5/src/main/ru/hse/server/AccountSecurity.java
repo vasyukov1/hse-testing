@@ -1,49 +1,51 @@
 package ru.hse.server;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import ru.hse.OperationResponse;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AccountSecurity implements IAccountChangeVerifier, IAccountAuthListener {
-    private final AccountServer aserver;
-    private final ServerStorage data;
-    private Map<String, Double> degreeOfSuspect = new HashMap<>();
-    private Map<String, Double> maxChange = new HashMap<>();
+    private static final double SUSPICION_THRESHOLD = 250.0d;
 
-    public AccountSecurity(AccountServer auth, ServerStorage data) {
-        this.aserver = auth;
-        this.data = data;
-    }
+    private final Map<String, Double> degreeOfSuspect = new ConcurrentHashMap<>();
+    private final Map<String, Double> maxChange = new ConcurrentHashMap<>();
 
     @Override
     public int approveChange(String user, double change) {
-        if (testOperationIsSuspect(user, change) && change < 0)
-            return OperationResponse.UNDEFINED_ERROR;
-        upSuspectLevel(user, change);
-        return OperationResponse.SUCCEED;
-    }
-
-    private void upSuspectLevel(String user, double change) {
-    }
-
-    private boolean testOperationIsSuspect(String user, double change) {
-        Double dos = degreeOfSuspect.get(user);
-        if (dos == null) {
-            synchronized (degreeOfSuspect) {
-                degreeOfSuspect.put(user, 0d);
-            }
-        } else {
-            if (dos > 100d) return true;
+        if (user == null) {
+            return OperationResponse.NULL_ARGUMENT;
         }
-        return false;
+
+        double absoluteChange = Math.abs(change);
+        if (change < 0 && isSuspect(user, absoluteChange)) {
+            return OperationResponse.UNDEFINED_ERROR;
+        }
+
+        updateSuspicion(user, absoluteChange);
+        return OperationResponse.SUCCEED;
     }
 
     @Override
     public void accountLogin(String login) {
+        degreeOfSuspect.putIfAbsent(login, 0.0d);
+        maxChange.putIfAbsent(login, 0.0d);
     }
 
     @Override
     public void accountLogout(String login) {
+        degreeOfSuspect.remove(login);
+        maxChange.remove(login);
+    }
+
+    private boolean isSuspect(String user, double absoluteChange) {
+        double suspicionLevel = degreeOfSuspect.getOrDefault(user, 0.0d);
+        double highestChange = maxChange.getOrDefault(user, 0.0d);
+        return suspicionLevel > SUSPICION_THRESHOLD && absoluteChange > highestChange;
+    }
+
+    private void updateSuspicion(String user, double absoluteChange) {
+        degreeOfSuspect.merge(user, absoluteChange, Double::sum);
+        maxChange.merge(user, absoluteChange, Math::max);
     }
 }

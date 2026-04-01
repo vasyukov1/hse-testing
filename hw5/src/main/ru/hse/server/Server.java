@@ -1,57 +1,67 @@
 package ru.hse.server;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Server {
-    ServerStorage storage = null;
-    ServerLogicProxy storageProxy = null;
-    AccountServer server = null;
-    ApiServer apiServer = null;
-    AccountSecurity accountSecurity = null;
+    private ServerStorage storage;
+    private ApiServer apiServer;
 
     public void start(int port) {
-        storage = new ServerStorage("accounts");
-        storageProxy = new ServerLogicProxy(storage);
-        server = new AccountServer(storage, storageProxy);
-        // security server, tends to be active only when accounts are logged
-        accountSecurity = new AccountSecurity(server, storage);
-        apiServer = new ApiServer(server, port);
+        start(port, "accounts");
+    }
 
-        storage.setChangeVerifier(accountSecurity);
-        apiServer.addAuthListener(accountSecurity);
+    public void start(int port, String databaseName) {
+        storage = new ServerStorage(databaseName);
+        storage.initialize();
+        ServerLogicProxy serverLogicProxy = new ServerLogicProxy(storage);
+        AccountServer accountServer = new AccountServer(storage, serverLogicProxy);
+        AccountSecurity security = new AccountSecurity();
+        apiServer = new ApiServer(accountServer, port);
+
+        storage.setChangeVerifier(security);
+        apiServer.addAuthListener(security);
     }
 
     public void stop() {
-        apiServer.stop();
-    }
-
-    public static void main(String[] args) {
-        Server s = new Server();
-        int port = 7000;
-        if (args.length>0)
-            try{
-                port = Integer.parseInt(args[0]);
-            }catch(NumberFormatException ignore){}
-        s.start(port);
-
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter stop to stop a server: ");
-        while (!scanner.nextLine().trim().equals("stop")) {
-            System.out.print("Wrong command, enter stop to stop a server:");
+        if (apiServer != null) {
+            apiServer.stop();
         }
-        s.stop();
+        if (storage != null) {
+            storage.close();
+        }
     }
 
     public void waitStarted() {
-        while (!apiServer.isStarted) {
-            synchronized (apiServer) {
-                try {
-                    apiServer.wait(500);
-                } catch (InterruptedException ignored) {
-                }
+        if (apiServer == null || apiServer.isStarted()) {
+            return;
+        }
+
+        try {
+            apiServer.awaitStarted();
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server();
+        int port = 7000;
+        if (args.length > 0) {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (NumberFormatException ignored) {
+                port = 7000;
             }
         }
+
+        server.start(port);
+        try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
+            System.out.print("Enter stop to stop a server: ");
+            while (!"stop".equals(scanner.nextLine().trim())) {
+                System.out.print("Wrong command, enter stop to stop a server: ");
+            }
+        }
+        server.stop();
     }
 }
