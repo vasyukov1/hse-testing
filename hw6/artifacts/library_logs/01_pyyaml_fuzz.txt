@@ -1,0 +1,33 @@
+...                                                                      [100%]
+============================ Hypothesis Statistics =============================
+calcPython/yaml_fuzz.py::test_yaml_safe_load_fuzz:
+
+  - during generate phase (1.58 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 3000 passing examples, 0 failing examples, 0 invalid examples
+
+  - Stopped because settings.max_examples=3000
+
+
+calcPython/yaml_fuzz.py::test_yaml_compose_fuzz:
+
+  - during generate phase (1.63 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 3000 passing examples, 0 failing examples, 0 invalid examples
+
+  - Stopped because settings.max_examples=3000
+
+
+calcPython/yaml_fuzz.py::test_yaml_safe_dump_fuzz:
+
+  - during generate phase (11.30 seconds):
+    - Typical runtimes: ~ 0-7 ms, of which ~ 0-6 ms in data generation
+    - 3000 passing examples, 0 failing examples, 30 invalid examples
+    - Events:
+      * 15.48%, Draw for recursive(one_of(none(), booleans(), integers(), floats(allow_nan=False, allow_infinity=False), text(alphabet=' \t\n-:{}[],&*!#|>%?\'"@`0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', max_size=40)), lambda children: st.one_of(st.lists(children, max_size=5), st.dictionaries(YAML_KEYS, children, max_size=5),), max_leaves=20) exceeded max_leaves and had to be retried
+      * 7.52%, Retried draw from text(characters(categories=(), include_characters='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'), min_size=1, max_size=20).filter(not_yet_in_unique_list) to satisfy filter
+
+  - Stopped because settings.max_examples=3000
+
+
+3 passed in 14.58s

@@ -1,0 +1,259 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________________ test_calculate_with_processed_input ______________________
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+>   @settings(
+               
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+
+calcPython/fuzz.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+calcPython/fuzz.py:23: in test_calculate_with_processed_input
+    calculate(processed_input)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = ''
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+                    match s_tmp[1]: #get first character
+                        case '+':
+                            a += b
+                        case '-':
+                            a -= b
+                        case '*':
+                            a *= b
+                        case '/':
+                            if b == 0:
+                                return float("inf")
+                            a /= b
+                        case '%':
+                            a %= b
+                        case '^':
+                            a **= b
+                        case '!':
+                            # This operation is not implemented
+                            raise NotImplementedError("TODO: Не забыть реализовать оператор !")
+                        case _:
+                            raise CalcException("Недопустимая операция " + s_tmp)
+                    stack.append(a)
+                else:
+                    a = float(s_tmp)
+                    stack.append(a)
+            except CalcException:
+                raise CalcException("Недопустимый символ в выражении");
+        if len(stack) > 1:
+            raise CalcException("Количество операторов не соответствует количеству операндов")
+    
+>       return stack.pop()
+               ^^^^^^^^^^^
+E       IndexError: pop from empty list
+E       Falsifying example: test_calculate_with_processed_input(
+E           input_string='',
+E       )
+E       Explanation:
+E           These lines were always and only run by failing examples:
+E               /Users/alexvasyukov/Documents/GitHub/hse-testing/hw6/calcPython/calc.py:85
+
+calcPython/calc.py:88: IndexError
+---------------------------------- Hypothesis ----------------------------------
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+input_string = ''
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = ''
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+                    match s_tmp[1]: #get first character
+                        case '+':
+                            a += b
+                        case '-':
+                            a -= b
+                        case '*':
+                            a *= b
+                        case '/':
+                            if b == 0:
+                                return float("inf")
+                            a /= b
+                        case '%':
+                            a %= b
+                        case '^':
+                            a **= b
+                        case '!':
+                            # This operation is not implemented
+                            raise NotImplementedError("TODO: Не забыть реализовать оператор !")
+                        case _:
+                            raise CalcException("Недопустимая операция " + s_tmp)
+                    stack.append(a)
+                else:
+                    a = float(s_tmp)
+                    stack.append(a)
+            except CalcException:
+                raise CalcException("Недопустимый символ в выражении");
+        if len(stack) > 1:
+            raise CalcException("Количество операторов не соответствует количеству операндов")
+    
+>       return stack.pop()
+               ^^^^^^^^^^^
+E       IndexError: pop from empty list
+
+calcPython/calc.py:88: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='(b/d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4!3c3!3',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='9!d,.-Y X11',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z+6\t*9',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='9(b* ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='8X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='cXd%/YY985848\t',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='.6^',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+input_string = ''
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = ''
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+                    match s_tmp[1]: #get first character
+                        case '+':
+                            a += b
+                        case '-':
+                            a -= b
+                        case '*':
+                            a *= b
+                        case '/':
+                            if b == 0:
+                                return float("inf")
+                            a /= b
+                        case '%':
+                            a %= b
+                        case '^':
+                            a **= b
+                        case '!':
+                            # This operation is not implemented
+                            raise NotImplementedError("TODO: Не забыть реализовать оператор !")
+                        case _:
+                            raise CalcException("Недопустимая операция " + s_tmp)
+                    stack.append(a)
+                else:
+                    a = float(s_tmp)
+                    stack.append(a)
+            except CalcException:
+                raise CalcException("Недопустимый символ в выражении");
+        if len(stack) > 1:
+            raise CalcException("Количество операторов не соответствует количеству операндов")
+    
+>       return stack.pop()
+               ^^^^^^^^^^^
+E       IndexError: pop from empty list
+
+calcPython/calc.py:88: IndexError
+============================ Hypothesis Statistics =============================
+calcPython/fuzz.py::test_calculate_with_processed_input:
+
+  - during generate phase (0.04 seconds):
+    - Typical runtimes: ~ 0-22 ms, of which ~ 0-1 ms in data generation
+    - 9 passing examples, 1 failing examples, 0 invalid examples
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.00 seconds):
+    - Typical runtimes: ~ 4ms, of which < 1ms in data generation
+    - 0 passing examples, 1 failing examples, 0 invalid examples
+    - Tried 1 shrinks of which 0 were successful
+
+  - Stopped because nothing left to do
+
+
+=========================== short test summary info ============================
+FAILED calcPython/fuzz.py::test_calculate_with_processed_input - IndexError: ...
+1 failed in 0.17s

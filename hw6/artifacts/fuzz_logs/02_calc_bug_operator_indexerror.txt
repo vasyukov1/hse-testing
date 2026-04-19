@@ -1,0 +1,2125 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____________________ test_calculate_with_processed_input ______________________
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+>   @settings(
+               
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+
+calcPython/fuzz.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+calcPython/fuzz.py:23: in test_calculate_with_processed_input
+    calculate(processed_input)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '0 0 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+E                       Falsifying example: test_calculate_with_processed_input(
+E                           input_string='0!0',
+E                       )
+E                       Explanation:
+E                           These lines were always and only run by failing examples:
+E                               /Users/alexvasyukov/Documents/GitHub/hse-testing/hw6/calcPython/calc.py:58
+
+calcPython/calc.py:59: IndexError
+---------------------------------- Hypothesis ----------------------------------
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(b/d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4!3c3!3',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='9!d,.-Y X11',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z+6\t*9',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='9(b* ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='8X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='cXd%/YY985848\t',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='.6^',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='2-/-1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z*',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=',)29++',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4.',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='6c.7)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='.Y',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='8/d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='^X\n^a',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' (4d1b',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='35',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='bbc72c',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='ZcZ\t277!\n1b,',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='XYa1-e,0+X8',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='!f%7d1Y!5X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='c',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='^9Y%+',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' 9',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=',Z*.*++/.-2998',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\t6.c,4f/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='8',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1 .c',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+8fZ%-78-*fe7',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=',-*!8',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=')3Y%+',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5f*c',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='c54',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5*%16\t*',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+/\n0aa3,Xd^,-.-Y7/3(0Z2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='2.',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='974-',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4,(a!1%.b^0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='cZ!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+2e118',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='cc+',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\t',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='^8c.431',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%%4',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%%413%**4,e4/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%%413%**4,e4/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4%413%**4,e4/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4%413%**4,,4/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4%413%**4,,4/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4%413%**4,,4/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*15(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*15(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*15',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*15',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='**5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='**5*Z^f8',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='**5*Z^f8',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y,)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y,)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y,)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=',,)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=',4,)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=',4',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='4,4',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(,X)f,d9%ff24,\n-3() X0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(,X)f,d9%ff24,\n13() X0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(,X)f,d9%(f24,\n13() X0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(%X)f,d9%(f24,\n13() X0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(%X)f,d9%(f24,\n13() X00!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(%X)f,d9%(f24,\n13() X00!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(%X)f,d9%(f24,\n13() X00!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+Z8%X3\na%*!\t\n!/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+Z8%X3\na%*!72\n!/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+Z8%X3\na%*!!2\n!/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+Z8%X3\na%*!!2\n!/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+3Z8%X3\na%*!!2\n!/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+3Z8%X3\na%3!!2\n!/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+3Z8+X3\na%3!!2\n!/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*4a462 f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*44462 f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*444642f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*4446424f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='*4446444f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='64446444f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='644463274f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='+',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y+  ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y+  \t0(X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y+  \t0(X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y   \t0(X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y  0\t0(X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y  0\t0(Xa',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Y  0\t0(Xa',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='.(d3.d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='.(d3.d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='.(d3.d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='35573.d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='6463.d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='64635d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='64',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1+,',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1+,(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1+,+',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1+,+/a',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1+,+/aa!/1!X^6)c)7/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1+,+/aa!/1!X^6)c)7/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='/+,+/aa!/1!X^6)c)7/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0%,',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0%%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0-',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='--',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='7()',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='((-/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='((',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(2(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(((',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(((,4)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='(,(,4)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' 15+',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' 1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' 0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='40',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='40',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='00',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='000',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='cb',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='cb',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='117\n,a\t1)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='117\n,a11)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='117\n,a11)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='117\n,a17)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='117\n,a17)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='a\n^2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='7\n^2',
+)
+input_string = '7\n^2'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '7\n 2 ^'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='7\n^\n',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n\n^2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='7\n^27%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='7\n\n2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='7 60+',
+)
+input_string = '7 60+'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '7 60  +'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='7 60+',
+)
+input_string = '7 60+'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '7 60  +'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='7 60+',
+)
+input_string = '7 60+'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '7 60  +'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='7 6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='7 60+',
+)
+input_string = '7 60+'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '7 60  +'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='7 60+',
+)
+input_string = '7 60+'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '7 60  +'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='7 60++76',
+)
+input_string = '7 60++76'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '7 60  +  76 +'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='e36%!/.5( X*X\nZ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='e36%!/..5( X*X\nZ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=')e./0f529591*6Z1/,+7',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=')e./0f529591*6Z1/,+7*',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=')e./0f529591*6/1/,+7*',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=')e./0f529591*6/1/,+7*',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=')e./0f529591*6/1/,+7*',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d/',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d%eY',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='2\n a',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='c4',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='cc',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n9!X1-f/.)\t()',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n9!X1-f/.)\t()',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n9!X31-f/.)\t()',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n9!X31-1/.)\t()',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n9!X31-1/.)\t()',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n1!X31-1/.)\t()',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n1!X31-1/.)\t(50e\n*X0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='c2*',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='c',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='e\t',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\t',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0\t',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='00',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' !(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' !',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='  ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='  ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=' ',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='47e.^f,',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='47e.^f,',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='47e.^ff',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='41.^ff',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='41.^ff',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='31.^ff',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='31.3ff',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string=')',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z\ne/*751',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z\ne/*751',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='Z\ne/*7Z1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\ne/*7Z1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\ne/1Z1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\ne/1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\ne71',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\t%2bYec5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='3345bYec5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='3345bYec5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='3345bY5c5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='3345bY5c5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='3345bY5c5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='3345bY5c50e87eX,a',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='e',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1\n2',
+)
+input_string = '5!1\n2'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1\n2 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1\n28',
+)
+input_string = '5!1\n28'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1\n28 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='551',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5!!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%Yb!b',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%Yb!b',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%Yb!b',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+1.1)4d\t',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+1.1)4d\td*(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+1.1)4d\td*(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+1.1)4d\t)*(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+1.1)41\t)*(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+163441\t)*(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n+1634)1\t)*(',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='ab-+\t)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='a6-+\t)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='a6-+a)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='a61+a)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='a61+a)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='a615a)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='a615a5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='32!)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='32!)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='3',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='13',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='13,6a6e06',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='13',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d\n6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d\n6dYc48+',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d\n6dYc48d',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d\n6dYc480\t+5d  .2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d\n6dYc480\t+ d  .2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d\n6dYc480\t+ d  .2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='d\n6dYc420\t+ d  .2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='354c5^2e+X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='354ce^2e+X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='354ce^2e+e',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='354ce^2eee',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='354ce^2eee',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='354ce^21ee',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='354ce^2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%1^53^8f+Zaf0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%1^53^8f+Zaf0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%1^%3^8f+Zaf0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n7!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='\n77',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='77a)8!Y4',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='77a)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='777a)',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='777a)\n4)0,f/!*^)d8f%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='777a)\n4)0,f/!*^)d8f%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='777a)\n4)0,f/!*^)d8f%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='777a)\n4)0,1f/!*^)d8f%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\te8eXY6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\teY8eXY6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\teY8eXY6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\te68eXY6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1\te68eXY6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='6\te68eXY6',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='6\te68eXY6X%6-b4f',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='69',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='695%%/2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='699%%/2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='69%%%/2',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='69%%%22',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='69%%%62',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='69%%%60X',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='!1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='51',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='!1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='!1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!1',
+)
+input_string = '5!1'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 1 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='41',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5!0',
+)
+input_string = '5!0'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '5 0 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='5!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='500',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='510',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='560',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5Y0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5(0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='5%0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0!0',
+)
+input_string = '0!0'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '0 0 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='0!',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='000',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='010',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='060',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0Y0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0(0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0%0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0%',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='00',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='11',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='030',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='020',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='040',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='090',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='!0',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='01',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='01',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='0!0',
+)
+input_string = '0!0'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '0 0 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='0!0',
+)
+input_string = '0!0'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '0 0 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='0!0',
+)
+input_string = '0!0'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '0 0 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='0!0',
+)
+input_string = '0!0'
+
+    @given(st.text(alphabet=CALC_INPUT_ALPHABET, min_size=0, max_size=200))
+    @settings(
+        verbosity=Verbosity.verbose,
+        max_examples=100_000,
+        derandomize=True,
+        deadline=None,
+        suppress_health_check=[HealthCheck.too_slow],
+    )
+    def test_calculate_with_processed_input(input_string):
+        try:
+            processed_input = opn(input_string)
+        except Exception:
+            return
+    
+        try:
+>           calculate(processed_input)
+
+calcPython/fuzz.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+s_in = '0 0 !'
+
+    def calculate(s_in):
+        stack = []
+        for token in s_in.split():
+            try:
+                s_tmp = token.strip()
+                if len(s_tmp) == 1 and is_op(s_tmp):
+                    if len(stack) < 2:
+                        raise CalcException("Неверное количество данных в стеке для операции " + token)
+                    b, a = stack.pop(), stack.pop()
+>                   match s_tmp[1]: #get first character
+                          ^^^^^^^^
+                        case '+':
+E                       IndexError: string index out of range
+
+calcPython/calc.py:59: IndexError
+
+Trying example: test_calculate_with_processed_input(
+    input_string='1',
+)
+Trying example: test_calculate_with_processed_input(
+    input_string='1',
+)
+============================ Hypothesis Statistics =============================
+calcPython/fuzz.py::test_calculate_with_processed_input:
+
+  - during generate phase (0.30 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which ~ 0-1 ms in data generation
+    - 284 passing examples, 10 failing examples, 0 invalid examples
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.10 seconds):
+    - Typical runtimes: ~ 0-3 ms, of which < 1ms in data generation
+    - 45 passing examples, 6 failing examples, 0 invalid examples
+    - Tried 51 shrinks of which 6 were successful
+
+  - Stopped because nothing left to do
+
+
+=========================== short test summary info ============================
+FAILED calcPython/fuzz.py::test_calculate_with_processed_input - IndexError: ...
+1 failed in 0.42s

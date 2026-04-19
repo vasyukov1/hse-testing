@@ -1,0 +1,12 @@
+.                                                                        [100%]
+============================ Hypothesis Statistics =============================
+calcPython/fuzz.py::test_calculate_with_processed_input:
+
+  - during generate phase (13.55 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 5000 passing examples, 0 failing examples, 0 invalid examples
+
+  - Stopped because settings.max_examples=5000
+
+
+1 passed in 13.58s
