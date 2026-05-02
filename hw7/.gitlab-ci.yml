@@ -1,0 +1,109 @@
+stages:
+  - build
+  - test
+  - publish
+  - mutation
+
+default:
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openjdk21 bash curl unzip
+    - chmod +x gradlew
+  cache:
+    key: "$CI_PROJECT_ID-gradle"
+    paths:
+      - .gradle/
+
+variables:
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+  PACKAGE_NAME: "telegram-bot"
+  PACKAGE_VERSION: "0.0.1"
+
+build_jar:
+  stage: build
+  script:
+    - ./gradlew :shadowJar
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - build/libs/*.jar
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+
+minimal_test:
+  stage: test
+  needs:
+    - job: build_jar
+      artifacts: true
+  script:
+    - ./gradlew test --tests '*Minimal'
+  artifacts:
+    when: always
+    expire_in: 1 week
+    reports:
+      junit:
+        - build/test-results/test/*.xml
+    paths:
+      - build/libs/*.jar
+      - build/reports/tests/test/
+      - build/test-results/test/
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+
+full_test:
+  stage: test
+  needs:
+    - job: build_jar
+      artifacts: true
+  script:
+    - ./gradlew test jacocoTestReport
+  artifacts:
+    when: always
+    expire_in: 1 week
+    reports:
+      junit:
+        - build/test-results/test/*.xml
+    paths:
+      - build/libs/*.jar
+      - build/reports/tests/test/
+      - build/test-results/test/
+      - build/jacocoReport/test/html/
+      - build/jacocoReport/test/jacocoTestReport.xml
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+publish_package:
+  stage: publish
+  needs:
+    - job: build_jar
+      artifacts: true
+    - job: full_test
+      artifacts: true
+  script:
+    - |
+      ./gradlew shadowJar
+      JAR_FILE="$(find build/libs -maxdepth 1 -type f -name '*all.jar' | head -n 1)"
+      test -n "$JAR_FILE"
+      curl --fail --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file "$JAR_FILE" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/$(basename "$JAR_FILE")"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+mutation_test:
+  stage: mutation
+  script:
+    - ./gradlew :pitest
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - build/reports/pitest/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: manual
+    - when: never

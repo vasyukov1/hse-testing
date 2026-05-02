@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+commit_message_file="$1"
+required_tag="${OKIT_COMMIT_TAG:-ОКИТ_5}"
+
+if ! grep -q "$required_tag" "$commit_message_file"; then
+    echo "Commit message must contain tag '$required_tag'." >&2
+    echo "Example: git commit -m \"ОКИТ_5 add mutation tests\"" >&2
+    exit 1
+fi

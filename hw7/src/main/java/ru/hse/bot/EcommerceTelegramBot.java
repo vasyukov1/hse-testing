@@ -83,7 +83,7 @@ public class EcommerceTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update == null || !update.getMessage().hasText()) {
+        if (update == null || update.getMessage() == null || !update.getMessage().hasText()) {
             return;
         }
 
@@ -139,28 +139,30 @@ public class EcommerceTelegramBot extends TelegramLongPollingBot {
 
     private void handleHelpCommand(Long chatId, String text) {
         text = text.substring(5).trim();
-        if(text.isEmpty() || text.equals("help"))
+        if(text.isEmpty() || text.equals("help")) {
             sendMessage(chatId, HELP_TEXT);
-        else
-            switch (text){
-                case "start":
-                    sendMessage(chatId, HELP_TEXT_START);
-                    break;
-                case "account":
-                    sendMessage(chatId, HELP_TEXT_ACCOUNT);
-                    break;
-                case "orders":
-                    sendMessage(chatId, HELP_TEXT_ORDERS);
-                    break;
-                case "products":
-                    sendMessage(chatId, HELP_TEXT_GOODS);
-                    break;
-                case "coupon":
-                    sendMessage(chatId, HELP_TEXT_COUPON);
-                    break;
-                case "cart":
-                    sendMessage(chatId, HELP_TEXT_CART);
-                    break;
+            return;
+        }
+
+        switch (text){
+            case "start":
+                sendMessage(chatId, HELP_TEXT_START);
+                return;
+            case "account":
+                sendMessage(chatId, HELP_TEXT_ACCOUNT);
+                return;
+            case "orders":
+                sendMessage(chatId, HELP_TEXT_ORDERS);
+                return;
+            case "products":
+                sendMessage(chatId, HELP_TEXT_GOODS);
+                return;
+            case "coupon":
+                sendMessage(chatId, HELP_TEXT_COUPON);
+                return;
+            case "cart":
+                sendMessage(chatId, HELP_TEXT_CART);
+                return;
             }
         sendMessage(chatId, HELP_TEXT_UNKNOWN);
     }
